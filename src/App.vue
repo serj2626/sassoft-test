@@ -3,5 +3,4 @@
 <template>
   <div></div>
 </template>
-
-<style scoped></style>
+<style scoped lang="scss"></style>
