@@ -2,16 +2,15 @@
 import { storeToRefs } from "pinia";
 import { useAccountsStore } from "../../stores/accounts";
 import { ref } from "vue";
-import type { ISelectOption, IStateAccount } from "../../types";
+import type { ISelectOption } from "../../types";
 
 const accountsStore = useAccountsStore();
-const { accounts, nextId } = storeToRefs(accountsStore);
+const { accounts } = storeToRefs(accountsStore);
 
 const options = ref<ISelectOption[]>([
   { id: 1, label: "Локальная" },
   { id: 2, label: "LDAP" },
 ]);
-
 </script>
 <template>
   <div class="table-component">
@@ -30,9 +29,11 @@ const options = ref<ISelectOption[]>([
           <td>
             <UIInput
               type="text"
+              mode="label"
+              plaсeholder="Необязательное поле"
               :input-value="account.label"
               class="table-component__input"
-              @update:model-value="
+              @update:input-value="
                 accountsStore.updateAccount(account.id, { label: $event })
               "
             />
@@ -49,9 +50,11 @@ const options = ref<ISelectOption[]>([
           <td :colspan="account.recordType !== 'Локальная' ? `2` : `1`">
             <UIInput
               type="text"
+              mode="login"
+              plaсeholder="Введите логин"
               :input-value="account.login"
               class="table-component__input"
-              @update:model-value="
+              @update:input-value="
                 accountsStore.updateAccount(account.id, { login: $event })
               "
             />
@@ -59,20 +62,21 @@ const options = ref<ISelectOption[]>([
           <td v-if="account.recordType === 'Локальная'">
             <UIInput
               type="password"
+              mode="password"
+              plaсeholder="Введите пароль"
               :input-value="account.password"
               class="table-component__input"
-              @update:model-value="
+              @update:input-value="
                 accountsStore.updateAccount(account.id, { password: $event })
               "
             />
           </td>
           <td>
-            <button
-              class="table-component__btn"
+            <UIButton
+              icon="del"
+              size="26"
               @click="accountsStore.removeAccount(account.id)"
-            >
-              <UIIcon name="del" size="26" />
-            </button>
+            />
           </td>
         </tr>
       </tbody>
@@ -82,19 +86,6 @@ const options = ref<ISelectOption[]>([
 <style scoped lang="scss">
 .table-component {
   width: 100%;
-  // overflow-x: auto;
-
-  // -moz-user-select: none;
-  // -webkit-user-select: none;
-  // -ms-user-select: none;
-  // user-select: none;
-
-  &__btn {
-    transition: all 0.3s ease-in-out;
-    &:hover {
-      scale: 1.2;
-    }
-  }
 }
 table {
   width: 100%;
@@ -106,13 +97,12 @@ th {
   background-color: #f2f2f2;
   padding: 12px;
   text-align: left;
-  border-bottom: 2px solid #ddd;
+
   font-weight: bold;
 }
 
 td {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
   vertical-align: baseline;
 }
 

@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import ButtonIcon from './ButtonIcon.vue'
+import Button from './Button.vue'
 import Icon from './Icon.vue'
 import Input from './Input.vue'
 import Select from './Select.vue'
@@ -7,7 +7,7 @@ import Select from './Select.vue'
 const components = [
   { name: 'UIInput', component: Input },
   { name: 'UISelect', component: Select },
-  { name: 'UIButtonWithIcon', component: ButtonIcon },
+  { name: 'UIButton', component: Button },
   { name: 'UIIcon', component: Icon },
 ]
 

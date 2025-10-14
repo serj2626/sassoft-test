@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { useAccountsStore } from '../../stores/accounts';
+import { useAccountsStore } from "../../stores/accounts";
 
 const modal = useAccountsStore();
 </script>
 <template>
   <div class="account-header-action">
-    <span class="account-header-action__title">Учетные записи</span>
-    <button class="account-header-action__btn" @click="modal.addAccount">
-      <UIIcon name="plus" size="26" />
-    </button>
+    <span class="account-header-action__title"> Учетные записи </span>
+    <UIButton
+      class="account-header-action__btn"
+      icon="plus"
+      size="26"
+      @click="modal.addAccount"
+    />
   </div>
 </template>
 <style scoped lang="scss">
@@ -23,21 +26,12 @@ const modal = useAccountsStore();
   font-size: 18px;
 }
 .account-header-action__btn {
-  border: 1px solid $border-color;
+  border: 1px solid $border-color !important;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px;
   height: 50px;
   border-radius: 10px;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease-in-out, scale 0.4s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 0 10px $border-color;
-  }
-  &:active {
-    scale: 0.9;
-  }
 }
 </style>
