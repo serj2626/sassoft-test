@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
+import { computed, ref } from "vue";
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const isFocused = ref(false);
@@ -59,7 +58,10 @@ const currentType = computed(() => {
 <template>
   <label
     class="base-input"
-    :class="{ 'base-input_isfocused': isFocused, 'base-input_error': error && !inputValue }"
+    :class="{
+      'base-input_isfocused': isFocused,
+      'base-input_error': error && !inputValue,
+    }"
   >
     <input
       ref="inputRef"
@@ -75,13 +77,13 @@ const currentType = computed(() => {
     <small v-if="error && !inputValue" class="base-input__error">
       {{ error }}
     </small>
-    <!-- <Icon
+    <UIIcon
       v-if="type === 'password'"
-      :name="showPassword ? HeroIcons.EYE_CLOSE : HeroIcons.EYE"
+      :name="showPassword ? 'eye_close' : 'eye_open'"
       size="20"
       class="base-input__icon"
       @click="showPassword = !showPassword"
-    /> -->
+    />
   </label>
 </template>
 <style lang="scss" scoped>
@@ -91,8 +93,8 @@ const currentType = computed(() => {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  background-color: #323232;
-  border: 1px solid #6e666688;
+  background-color: transparent;
+  border: 1px solid $border-color;
   border-radius: 10px;
   transition: outline 0.6s ease-in;
 

@@ -1,11 +1,50 @@
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 import type { IStateAccount } from "../types";
 import { defineStore } from "pinia";
 
 export const useAccountsStore = defineStore("accounts", () => {
-  const accounts = ref<IStateAccount[]>([]);
-  const nextId = ref(1);
+  const accounts = ref<IStateAccount[]>([
+    {
+      id: 1,
+      label: "ХХХ",
+      recordType: "Локальная",
+      login: "Значение",
+      password: "●●●●●",
+    },
+    {
+      id: 2,
+      label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ",
+      recordType: "Локальная",
+      login: "Значение",
+      password: "●●●●●",
+    },
+    {
+      id: 3,
+      label: "ХХХ",
+      recordType: "Локальная",
+      login: "Значение",
+      password: "●●●●●",
+    },
+    {
+      id: 4,
+      label: "Значение",
+      recordType: "LDAP",
+      login: "Значение",
+      password: "●●●●●",
+    },
+    {
+      id: 5,
+      label: "Значение",
+      recordType: "LDAP",
+      login: "Значение",
+      password: "●●●●●",
+    },
+  ]);
+  
+  const nextId = computed(() => {
+    return Math.max(...accounts.value.map((a) => a.id)) + 1;
+  });
 
   const stored = localStorage.getItem("accounts");
   if (stored) {
@@ -25,7 +64,6 @@ export const useAccountsStore = defineStore("accounts", () => {
     localStorage.setItem("accounts", JSON.stringify(accounts.value));
   });
 
-
   const addAccount = (account: Omit<IStateAccount, "id">) => {
     accounts.value.push({
       id: nextId.value++,
@@ -33,13 +71,13 @@ export const useAccountsStore = defineStore("accounts", () => {
     });
   };
 
-const updateAccount = (id: number, updated: Partial<IStateAccount>) => {
-  const index = accounts.value.findIndex((acc) => acc.id === id);
-  if (index !== -1) {
-    const account = accounts.value[index] as IStateAccount;
-    accounts.value[index] = { ...account, ...updated };
-  }
-};
+  const updateAccount = (id: number, updated: Partial<IStateAccount>) => {
+    const index = accounts.value.findIndex((acc) => acc.id === id);
+    if (index !== -1) {
+      const account = accounts.value[index] as IStateAccount;
+      accounts.value[index] = { ...account, ...updated };
+    }
+  };
   const removeAccount = (id: number) => {
     accounts.value = accounts.value.filter((acc) => acc.id !== id);
   };
@@ -56,5 +94,6 @@ const updateAccount = (id: number, updated: Partial<IStateAccount>) => {
     updateAccount,
     removeAccount,
     reset,
+    nextId,
   };
 });

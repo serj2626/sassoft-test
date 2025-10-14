@@ -1,9 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AccountComponent from "./components/account/AccountComponent.vue";
+</script>
 <template>
-  <div class="my-app">
-    <div class="container">
-      <h1 class="my-app__title">Hello World</h1>
-    </div>
+  <div class="container">
+      <AccountComponent />
   </div>
 </template>
-<style scoped lang="scss"></style>
