@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import type { ISelectOption, ISelectProps } from "../../types";
+import { setNewSelectData } from "../../utils/functions";
 
 const props = defineProps<ISelectProps>();
 
@@ -9,27 +10,25 @@ const emit = defineEmits(["update:modelSelect"]);
 const isOpen = ref(false);
 const selectRef = ref<HTMLElement>();
 
-// Проверка выбранной опции
+
 const isSelected = (value: string | number) => value === props.modelValue;
 
-// Переключение dropdown
+
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
 const selectOption = (option: ISelectOption) => {
-  emit("update:modelSelect", option.label);
+  emit("update:modelSelect", setNewSelectData(option.label));
   isOpen.value = false;
 };
 
-// Закрытие при клике мимо
 const handleClickOutside = (event: MouseEvent) => {
   if (selectRef.value && !selectRef.value.contains(event.target as Node)) {
     isOpen.value = false;
   }
 };
 
-// Обработчик клавиатуры
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === "Escape") {
     isOpen.value = false;

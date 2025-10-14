@@ -4,6 +4,8 @@ import { computed, ref } from "vue";
 const inputRef = ref<HTMLInputElement | null>(null);
 const isFocused = ref(false);
 
+defineEmits(["update:modelValue"]);
+
 const handleFocus = () => {
   isFocused.value = true;
 };
@@ -15,59 +17,52 @@ const handleBlur = () => {
 type TInputTypes =
   | "button"
   | "checkbox"
-  | "color"
-  | "date"
-  | "datetime-local"
   | "email"
-  | "file"
-  | "hidden"
-  | "image"
-  | "month"
   | "number"
   | "password"
-  | "radio"
-  | "range"
-  | "reset"
-  | "search"
   | "submit"
   | "tel"
   | "text"
-  | "time"
-  | "url"
-  | "week";
 
 interface IInputProps {
   placeholder?: string;
   type?: TInputTypes;
-  modelValue?: string;
+  inputValue?: string;
+  required?: boolean;
+  mode?: "label" | "login" | "password";
 }
 
-const inputValue = defineModel<string>("inputValue");
-const error = defineModel<string>("error");
+const {
+  placeholder = "Введите текст",
+  type = "text",
+  required = false,
+  mode = "label",
+} = defineProps<IInputProps>();
 
-const props = defineProps<IInputProps>();
+const error = ref<string | null>(null);
 
 const showPassword = ref(false);
 
 const currentType = computed(() => {
-  if (props.type === "password" && showPassword.value) {
+  if (type === "password" && showPassword.value) {
     return "text";
   }
-  return props.type;
+  return type;
 });
+
 </script>
 <template>
   <label
     class="base-input"
     :class="{
       'base-input_isfocused': isFocused,
-      'base-input_error': error && !inputValue,
+      'base-input_error': error,
     }"
   >
     <input
       ref="inputRef"
-      v-model="inputValue"
       :type="currentType"
+      :value="inputValue"
       class="base-input__input"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -132,7 +127,6 @@ const currentType = computed(() => {
     border-radius: 5px;
     color: $txt;
     transition: outline 0.6s ease-in;
-
   }
 
   &__icon {

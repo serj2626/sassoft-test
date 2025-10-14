@@ -12,19 +12,6 @@ const options = ref<ISelectOption[]>([
   { id: 2, label: "LDAP" },
 ]);
 
-
-function setNewRecordType(id: number, recordType: string) {
-  const newData: Partial<IStateAccount> =
-    recordType === "LDAP"
-      ? { recordType, password: null }
-      : { recordType };
-  accountsStore.updateAccount(id, newData);
-}
-
-
-function setNewData(){
-  
-}
 </script>
 <template>
   <div class="table-component">
@@ -43,9 +30,9 @@ function setNewData(){
           <td>
             <UIInput
               type="text"
-              v-model:input-value="account.label"
+              :input-value="account.label"
               class="table-component__input"
-              @update:model-select="
+              @update:model-value="
                 accountsStore.updateAccount(account.id, { label: $event })
               "
             />
@@ -55,16 +42,16 @@ function setNewData(){
               :model-value="account.recordType"
               :options="options"
               @update:model-select="
-                setNewRecordType(account.id, $event as string)
+                accountsStore.updateAccount(account.id, $event)
               "
             />
           </td>
           <td :colspan="account.recordType !== 'Локальная' ? `2` : `1`">
             <UIInput
               type="text"
-              v-model:input-value="account.login"
+              :input-value="account.login"
               class="table-component__input"
-              @update:model-select="
+              @update:model-value="
                 accountsStore.updateAccount(account.id, { login: $event })
               "
             />
@@ -72,8 +59,11 @@ function setNewData(){
           <td v-if="account.recordType === 'Локальная'">
             <UIInput
               type="password"
-              v-model:input-value="account.password"
+              :input-value="account.password"
               class="table-component__input"
+              @update:model-value="
+                accountsStore.updateAccount(account.id, { password: $event })
+              "
             />
           </td>
           <td>
