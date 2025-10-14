@@ -30,7 +30,8 @@ const options = ref<ISelectOption[]>([
             <UIInput
               type="text"
               mode="label"
-              plaсeholder="Необязательное поле"
+              :required="false"
+              placeholder="Необязательное поле"
               :input-value="account.label"
               class="table-component__input"
               @update:input-value="
@@ -51,7 +52,8 @@ const options = ref<ISelectOption[]>([
             <UIInput
               type="text"
               mode="login"
-              plaсeholder="Введите логин"
+              :required="true"
+              placeholder="Введите логин"
               :input-value="account.login"
               class="table-component__input"
               @update:input-value="
@@ -63,7 +65,8 @@ const options = ref<ISelectOption[]>([
             <UIInput
               type="password"
               mode="password"
-              plaсeholder="Введите пароль"
+              :required="true"
+              placeholder="Введите пароль"
               :input-value="account.password"
               class="table-component__input"
               @update:input-value="
