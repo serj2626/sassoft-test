@@ -75,13 +75,13 @@ const currentType = computed(() => {
     <small v-if="error && !inputValue" class="base-input__error">
       {{ error }}
     </small>
-    <Icon
+    <!-- <Icon
       v-if="type === 'password'"
       :name="showPassword ? HeroIcons.EYE_CLOSE : HeroIcons.EYE"
       size="20"
       class="base-input__icon"
       @click="showPassword = !showPassword"
-    />
+    /> -->
   </label>
 </template>
 <style lang="scss" scoped>
@@ -104,7 +104,7 @@ const currentType = computed(() => {
     }
   }
   &_error {
-    outline: 1px solid $red;
+    outline: 1px solid $danger;
   }
 
   &__placeholder {
@@ -115,7 +115,7 @@ const currentType = computed(() => {
   }
   &__error {
     position: absolute;
-    color: $red;
+    color: $danger;
     padding-left: 15px;
     font-size: 14px;
     font-weight: 600;
@@ -126,7 +126,7 @@ const currentType = computed(() => {
     cursor: auto;
     border-radius: 5px;
     color: $white;
-    transition: outline $desctop_wide;
+    transition: outline 0.6s ease-in;
 
     // &:focus {
     //   .base-input {

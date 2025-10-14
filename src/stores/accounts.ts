@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 
 import type { IStateAccount } from "../types";
 import { defineStore } from "pinia";
@@ -21,13 +21,10 @@ export const useAccountsStore = defineStore("accounts", () => {
     }
   }
 
-  watch(
-    accounts,
-    (val) => {
-      localStorage.setItem("accounts", JSON.stringify(val));
-    },
-    { deep: true }
-  );
+  watchEffect(() => {
+    localStorage.setItem("accounts", JSON.stringify(accounts.value));
+  });
+
 
   const addAccount = (account: Omit<IStateAccount, "id">) => {
     accounts.value.push({
@@ -36,13 +33,13 @@ export const useAccountsStore = defineStore("accounts", () => {
     });
   };
 
-  const updateAccount = (id: number, updated: Partial<IStateAccount>) => {
-    const index = accounts.value.findIndex((acc) => acc.id === id);
-    if (index !== -1) {
-      accounts.value[index] = { ...accounts.value[index], ...updated };
-    }
-  };
-
+const updateAccount = (id: number, updated: Partial<IStateAccount>) => {
+  const index = accounts.value.findIndex((acc) => acc.id === id);
+  if (index !== -1) {
+    const account = accounts.value[index] as IStateAccount;
+    accounts.value[index] = { ...account, ...updated };
+  }
+};
   const removeAccount = (id: number) => {
     accounts.value = accounts.value.filter((acc) => acc.id !== id);
   };

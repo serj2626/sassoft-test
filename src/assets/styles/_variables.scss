@@ -1,0 +1,45 @@
+// Брейкпоинты
+$mobile: 375px;
+$tablet: 768px;
+$laptop: 1024px;
+$desktop: 1280px;
+$desktop-wide: 1440px;
+
+// Цветовая палитра
+$blue: #0055ff;
+$primary: #2a5f8a; 
+$primary-hover: darken($primary, 10%);
+$accent: #f49919;
+
+// Статусные цвета
+$success: #28a745;
+$danger: #dc3545;
+$warning: #ffc107;
+$info: #17a2b8;
+$white: #fff;
+
+// Фоновые цвета (добавил недостающий $bg)
+$bg: #f9f9f9; // Основной фон
+$bg-light: #fff; // Светлый фон
+$bg-dark: #1a1a1a; // Тёмный фон
+$bg-overlay: rgba(0, 0, 0, 0.7); // Наложение
+
+// Текст
+$txt: #333;
+$text-secondary: #777;
+
+// Границы
+$border-color: #dee2e6;
+$border-radius: 4px;
+
+// Тени
+$shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+// Анимации
+$transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast: 0.15s;
+$transition-normal: 0.3s;
+$transition-slow: 0.45s;

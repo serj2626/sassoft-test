@@ -1,12 +1,14 @@
 import type { App } from 'vue'
 import ButtonIcon from './ButtonIcon.vue'
+import Icon from './Icon.vue'
 import Input from './Input.vue'
 import Select from './Select.vue'
 
 const components = [
-  { name: 'UIButton', component: Input },
+  { name: 'UIInput', component: Input },
   { name: 'UISelect', component: Select },
   { name: 'UIButtonWithIcon', component: ButtonIcon },
+  { name: 'UIIcon', component: Icon },
 ]
 
 export default {
