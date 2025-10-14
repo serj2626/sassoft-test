@@ -1,8 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAccountsStore } from '../../stores/accounts';
+
+const modal = useAccountsStore();
+</script>
 <template>
   <div class="account-header-action">
     <span class="account-header-action__title">Учетные записи</span>
-    <button class="account-header-action__btn">
+    <button class="account-header-action__btn" @click="modal.addAccount">
       <UIIcon name="plus" size="26" />
     </button>
   </div>

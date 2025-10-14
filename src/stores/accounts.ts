@@ -10,40 +10,40 @@ export const useAccountsStore = defineStore("accounts", () => {
       label: "ХХХ",
       recordType: "Локальная",
       login: "Значение",
-      password: "●●●●●",
+      password: "123456",
     },
     {
       id: 2,
       label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ",
       recordType: "Локальная",
       login: "Значение",
-      password: "●●●●●",
+      password: "123456",
     },
     {
       id: 3,
       label: "ХХХ",
       recordType: "Локальная",
       login: "Значение",
-      password: "●●●●●",
+      password: "123456",
     },
     {
       id: 4,
       label: "Значение",
       recordType: "LDAP",
       login: "Значение",
-      password: "●●●●●",
+      password: "123456",
     },
     {
       id: 5,
       label: "Значение",
       recordType: "LDAP",
       login: "Значение",
-      password: "●●●●●",
+      password: "123456",
     },
   ]);
-  
+
   const nextId = computed(() => {
-    return Math.max(...accounts.value.map((a) => a.id)) + 1;
+    return accounts.value.length + 1;
   });
 
   const stored = localStorage.getItem("accounts");
@@ -51,10 +51,6 @@ export const useAccountsStore = defineStore("accounts", () => {
     try {
       const parsed = JSON.parse(stored) as IStateAccount[];
       accounts.value = parsed;
-
-      nextId.value = parsed.length
-        ? Math.max(...parsed.map((a) => a.id)) + 1
-        : 1;
     } catch (e) {
       console.error("Ошибка при парсинге accounts из localStorage", e);
     }
@@ -66,7 +62,7 @@ export const useAccountsStore = defineStore("accounts", () => {
 
   const addAccount = (account: Omit<IStateAccount, "id">) => {
     accounts.value.push({
-      id: nextId.value++,
+      id: nextId.value,
       ...account,
     });
   };
@@ -84,7 +80,6 @@ export const useAccountsStore = defineStore("accounts", () => {
 
   const reset = () => {
     accounts.value = [];
-    nextId.value = 1;
     localStorage.removeItem("accounts");
   };
 

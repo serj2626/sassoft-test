@@ -1,34 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import type { ISelectOption, ISelectProps } from "../../types";
 
-interface ISelectOption {
-  id: number;
-  label: string;
-}
+const props = defineProps<ISelectProps>();
 
-const options = ref<ISelectOption[]>([
-  { id: 1, label: "Локальная" },
-  { id: 2, label: "LDAP" },
-]);
-
-interface Props {
-  modelValue?: string | number;
-  placeholder?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Выберите опцию",
-});
-
-const emit = defineEmits<{
-  "update:modelValue": [value: string | number];
-}>();
+const emit = defineEmits(["update:modelSelect"]);
 
 const isOpen = ref(false);
 const selectRef = ref<HTMLElement>();
-
-// Выбранное значение
-
 
 // Проверка выбранной опции
 const isSelected = (value: string | number) => value === props.modelValue;
@@ -38,10 +17,8 @@ const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
-// Выбор опции
 const selectOption = (option: ISelectOption) => {
-
-  emit("update:modelValue", option.label);
+  emit("update:modelSelect", option.label);
   isOpen.value = false;
 };
 
@@ -59,13 +36,11 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-// Добавляем обработчики
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
   document.addEventListener("keydown", handleKeydown);
 });
 
-// Убираем обработчики
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
   document.removeEventListener("keydown", handleKeydown);
@@ -79,7 +54,7 @@ onUnmounted(() => {
       @click="toggleDropdown"
     >
       <span class="select__value">
-       sad
+        {{ modelValue || placeholder }}
       </span>
       <UIIcon
         name="arrow_down"
@@ -90,7 +65,7 @@ onUnmounted(() => {
 
     <div v-show="isOpen" class="select__dropdown">
       <div
-        v-for="option in options"
+        v-for="option in options.filter((item) => item.label !== modelValue)"
         :key="option.id"
         class="select__option"
         :class="{
@@ -107,7 +82,6 @@ onUnmounted(() => {
 .select {
   position: relative;
   width: 100%;
-  max-width: 300px;
 }
 
 .select__trigger {
@@ -156,7 +130,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   max-height: 200px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 9999;
   margin-top: 4px;
 }
 

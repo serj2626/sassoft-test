@@ -39,6 +39,7 @@ type TInputTypes =
 interface IInputProps {
   placeholder?: string;
   type?: TInputTypes;
+  modelValue?: string;
 }
 
 const inputValue = defineModel<string>("inputValue");
@@ -79,8 +80,8 @@ const currentType = computed(() => {
     </small>
     <UIIcon
       v-if="type === 'password'"
-      :name="showPassword ? 'eye_close' : 'eye_open'"
-      size="20"
+      :name="showPassword ? 'eye_open' : 'eye_close'"
+      size="46"
       class="base-input__icon"
       @click="showPassword = !showPassword"
     />
@@ -95,11 +96,13 @@ const currentType = computed(() => {
   gap: 5px;
   background-color: transparent;
   border: 1px solid $border-color;
+  word-break: break-all;
   border-radius: 10px;
-  transition: outline 0.6s ease-in;
+  width: 100%;
+  word-break: break-word;
+  // white-space: pre-wrap;
 
   &_isfocused {
-    outline: 1px solid $accent;
     .base-input__placeholder {
       opacity: 0;
       scale: 0.1;
@@ -127,14 +130,9 @@ const currentType = computed(() => {
     padding: 15px 19px 15px 15px;
     cursor: auto;
     border-radius: 5px;
-    color: $white;
+    color: $txt;
     transition: outline 0.6s ease-in;
 
-    // &:focus {
-    //   .base-input {
-    //     outline: 1px solid $accent;
-    //   }
-    // }
   }
 
   &__icon {

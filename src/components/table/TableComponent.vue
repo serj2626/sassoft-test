@@ -1,9 +1,30 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAccountsStore } from "../../stores/accounts";
+import { ref } from "vue";
+import type { ISelectOption, IStateAccount } from "../../types";
 
 const accountsStore = useAccountsStore();
 const { accounts, nextId } = storeToRefs(accountsStore);
+
+const options = ref<ISelectOption[]>([
+  { id: 1, label: "Локальная" },
+  { id: 2, label: "LDAP" },
+]);
+
+
+function setNewRecordType(id: number, recordType: string) {
+  const newData: Partial<IStateAccount> =
+    recordType === "LDAP"
+      ? { recordType, password: null }
+      : { recordType };
+  accountsStore.updateAccount(id, newData);
+}
+
+
+function setNewData(){
+  
+}
 </script>
 <template>
   <div class="table-component">
@@ -20,42 +41,50 @@ const { accounts, nextId } = storeToRefs(accountsStore);
       <tbody>
         <tr v-for="account in accounts" :key="account.id">
           <td>
-            {{ account.label }}
+            <UIInput
+              type="text"
+              v-model:input-value="account.label"
+              class="table-component__input"
+              @update:model-select="
+                accountsStore.updateAccount(account.id, { label: $event })
+              "
+            />
           </td>
           <td>
-            {{ account.recordType }}
+            <UISelect
+              :model-value="account.recordType"
+              :options="options"
+              @update:model-select="
+                setNewRecordType(account.id, $event as string)
+              "
+            />
+          </td>
+          <td :colspan="account.recordType !== 'Локальная' ? `2` : `1`">
+            <UIInput
+              type="text"
+              v-model:input-value="account.login"
+              class="table-component__input"
+              @update:model-select="
+                accountsStore.updateAccount(account.id, { login: $event })
+              "
+            />
+          </td>
+          <td v-if="account.recordType === 'Локальная'">
+            <UIInput
+              type="password"
+              v-model:input-value="account.password"
+              class="table-component__input"
+            />
           </td>
           <td>
-            {{ account.login }}
-          </td>
-          <td>
-            {{ account.password }}
-          </td>
-          <td>
-            <button class="table-component__btn">
-              <UIIcon name="del" size="20" />
+            <button
+              class="table-component__btn"
+              @click="accountsStore.removeAccount(account.id)"
+            >
+              <UIIcon name="del" size="26" />
             </button>
           </td>
         </tr>
-        <!-- <tr>
-          <td>
-            <UIInput />
-          </td>
-          <td>
-            <UISelect />
-          </td>
-          <td>
-            <UIInput />
-          </td>
-          <td>
-            <UIInput />
-          </td>
-          <td>
-            <button class="table-component__btn">
-              <UIIcon name="del" size="20" />
-            </button>
-          </td>
-        </tr> -->
       </tbody>
     </table>
   </div>
@@ -63,12 +92,12 @@ const { accounts, nextId } = storeToRefs(accountsStore);
 <style scoped lang="scss">
 .table-component {
   width: 100%;
-  overflow-x: auto;
+  // overflow-x: auto;
 
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  // -moz-user-select: none;
+  // -webkit-user-select: none;
+  // -ms-user-select: none;
+  // user-select: none;
 
   &__btn {
     transition: all 0.3s ease-in-out;
@@ -94,14 +123,14 @@ th {
 td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  vertical-align: top;
+  vertical-align: baseline;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: $bg-light;
 }
 
 tbody tr:hover {
-  background-color: #f5f5f5;
+  background-color: rgba($bg-light, $alpha: 1);
 }
 </style>
