@@ -10,7 +10,6 @@ const emit = defineEmits<{
 interface IInputProps {
   placeholder?: string;
   type?: TInputTypes;
-  required?: boolean;
   error?: string | null;
 }
 

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import type { ISelectOption, IStateAccount } from "../../types";
 import { useAccountsStore } from "../../stores/accounts";
-import { setNewSelectData } from "../../utils/functions";
+import { getArrayFromLabels } from "../../utils/functions";
 import { checkLength, validateLabels } from "../../utils/validation";
 
 interface ITableRowProps {
@@ -38,9 +38,23 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
   }
 
   if (isValid) {
-    accountsStore.updateAccount(account.id, { [field]: value });
-    accountsStore.saveToLocalStorage();
+    let updateData: Partial<IStateAccount> = { [field]: value };
+
+    if (field === "label") {
+      updateData.label = value;
+      updateData.labelsArray = getArrayFromLabels(value);
+    }
+    accountsStore.updateAccount(account.id, updateData);
+    // accountsStore.saveToLocalStorage();
   }
+};
+
+const handleSelectChange = (recordType: "Локальная" | "LDAP") => {
+  const updateData =
+    recordType === "LDAP" ? { recordType, password: null } : { recordType };
+
+  accountsStore.updateAccount(account.id, updateData);
+  // accountsStore.saveToLocalStorage();
 };
 </script>
 
@@ -49,7 +63,6 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
     <td>
       <UIInput
         type="text"
-        :required="false"
         placeholder="Необязательное поле"
         v-model:model-value="account.label"
         class="table-row__input"
@@ -69,7 +82,6 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
     <td :colspan="account.recordType !== 'Локальная' ? 2 : 1">
       <UIInput
         type="text"
-        :required="true"
         placeholder="Введите логин"
         v-model:model-value="account.login"
         class="table-row__input"
@@ -81,7 +93,6 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
     <td v-if="account.recordType === 'Локальная'">
       <UIInput
         type="password"
-        :required="true"
         placeholder="Введите пароль"
         v-model:model-value="account.password"
         class="table-row__input"

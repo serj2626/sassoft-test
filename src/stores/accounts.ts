@@ -14,27 +14,20 @@ export const useAccountsStore = defineStore("accounts", () => {
     },
     {
       id: 2,
-      label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ",
+      label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ", 
       recordType: "Локальная",
       login: "Значение",
       password: "123456",
     },
     {
       id: 3,
-      label: "ХХХ",
+      label: "ХХХ", 
       recordType: "Локальная",
       login: "Значение",
       password: "123456",
     },
     {
       id: 4,
-      label: "Значение",
-      recordType: "LDAP",
-      login: "Значение",
-      password: "123456",
-    },
-    {
-      id: 5,
       label: "Значение",
       recordType: "LDAP",
       login: "Значение",
@@ -67,7 +60,7 @@ export const useAccountsStore = defineStore("accounts", () => {
   const addEmptyRow = () => {
     accounts.value.push({
       id: nextId.value,
-      label: "",
+      label: '',
       recordType: "Локальная",
       login: "",
       password: "",
@@ -86,7 +79,7 @@ export const useAccountsStore = defineStore("accounts", () => {
   const removeAccount = (id: number) => {
     accounts.value = accounts.value.filter((acc) => acc.id !== id);
 
-    saveToLocalStorage();
+    // saveToLocalStorage();
   };
 
   const saveToLocalStorage = () => {

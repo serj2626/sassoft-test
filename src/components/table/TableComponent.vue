@@ -15,7 +15,7 @@ const options = ref<ISelectOption[]>([
 </script>
 <template>
   <div class="table-component">
-    <table>
+    <table v-if="accounts.length">
       <thead>
         <tr>
           <th>Метки</th>
@@ -33,11 +33,17 @@ const options = ref<ISelectOption[]>([
         />
       </tbody>
     </table>
+    <div v-else class="table-component__empty">Список учетных записей пуст</div>
   </div>
 </template>
 <style lang="scss">
 .table-component {
   width: 100%;
+
+  &__empty{
+    font-weight: 600;
+    font-size: 18px;
+  }
 }
 table {
   width: 100%;
