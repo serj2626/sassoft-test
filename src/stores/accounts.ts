@@ -91,9 +91,22 @@ export const useAccountsStore = defineStore("accounts", () => {
     saveToLocalStorage();
   };
 
-  const saveToLocalStorage = () => {
-    localStorage.setItem("accounts", JSON.stringify(accounts.value));
-  };
+const saveToLocalStorage = () => {
+
+  const validAccounts = accounts.value.filter(account => {
+    const hasLogin = account.login && account.login.trim() !== "";
+    const hasRecordType = account.recordType;
+    
+    if (account.recordType === "Локальная") {
+      return hasLogin && hasRecordType && account.password && account.password.trim() !== "";
+    }
+    
+ 
+    return hasLogin && hasRecordType;
+  });
+  
+  localStorage.setItem("accounts", JSON.stringify(validAccounts));
+};
 
   const reset = () => {
     accounts.value = [];

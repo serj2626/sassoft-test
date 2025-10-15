@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import type { ISelectOption, IStateAccount } from "../../types";
 import { useAccountsStore } from "../../stores/accounts";
 import { getArrayFromLabels } from "../../utils/functions";
@@ -17,6 +17,19 @@ const errors = ref<Record<string, string | null>>({
   label: null,
   login: null,
   password: null,
+});
+
+
+const isAccountValid = computed(() => {
+  const hasLogin = account.login && account.login.trim() !== "";
+  const hasRecordType = account.recordType;
+  
+  if (account.recordType === "Локальная") {
+    return hasLogin && hasRecordType && account.password && account.password.trim() !== "";
+  }
+  
+
+  return hasLogin && hasRecordType;
 });
 
 const handleInputBlur = (field: keyof IStateAccount, value: string) => {
@@ -41,25 +54,34 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
     let updateData: Partial<IStateAccount> = { [field]: value };
 
     if (field === "label") {
-      updateData.label = value;
       updateData.labelsArray = getArrayFromLabels(value);
     }
+    
     accountsStore.updateAccount(account.id, updateData);
+    
+
     accountsStore.saveToLocalStorage();
   }
 };
 
 const handleSelectChange = (recordType: "Локальная" | "LDAP") => {
-  const updateData =
-    recordType === "LDAP" ? { recordType, password: "" } : { recordType };
+
+  const updateData = recordType === "LDAP" 
+    ? { recordType, password: null } 
+    : { recordType };
 
   accountsStore.updateAccount(account.id, updateData);
+  accountsStore.saveToLocalStorage(); 
+};
+
+const handleDelete = () => {
+  accountsStore.removeAccount(account.id);
   accountsStore.saveToLocalStorage();
 };
 </script>
 
 <template>
-  <tr class="table-row">
+  <tr class="table-row" :class="{ 'table-row--invalid': !isAccountValid }">
     <td>
       <UIInput
         type="text"
@@ -106,15 +128,19 @@ const handleSelectChange = (recordType: "Локальная" | "LDAP") => {
         icon="del"
         size="26"
         class="table-row__delete-btn"
-        @click="accountsStore.removeAccount(account.id)"
+        @click="handleDelete"
       />
     </td>
   </tr>
 </template>
 
 <style scoped lang="scss">
+.table-row--invalid {
+  opacity: 0.7;
+  background-color: rgba(255, 0, 0, 0.05);
+}
 td {
-  padding: 10px;
+  padding: 6px;
   vertical-align: baseline;
 }
 </style>

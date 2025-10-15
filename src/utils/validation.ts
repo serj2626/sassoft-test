@@ -3,9 +3,9 @@ export function checkLength(
   mode: "label" | "login" | "password"
 ): string | null {
   const validationsData = {
-    label: 10,
-    login: 10,
-    password: 10,
+    label: 50,
+    login: 100,
+    password: 100,
   };
 
   const res = value.length <= validationsData[mode];

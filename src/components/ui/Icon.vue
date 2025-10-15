@@ -4,7 +4,6 @@ import type { IIconProps } from "../../types";
 
 const props = defineProps<IIconProps>();
 
-// Генерируем путь к иконке
 const iconPath = computed(() => {
   return new URL(`/src/assets/icons/${props.name}.svg`, import.meta.url).href;
 });
