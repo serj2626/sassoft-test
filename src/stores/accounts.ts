@@ -11,20 +11,28 @@ export const useAccountsStore = defineStore("accounts", () => {
       recordType: "Локальная",
       login: "Значение",
       password: "123456",
+      labelsArray: [{ text: "ХХХ" }],
     },
     {
       id: 2,
-      label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ", 
+      label: "ХХХ; УУУУУУУУУУ; ШШШЕ; МММММММММ",
       recordType: "Локальная",
       login: "Значение",
       password: "123456",
+      labelsArray: [
+        { text: "ХХХ" },
+        { text: "УУУУУУУУУУ" },
+        { text: "ШШШЕ" },
+        { text: "МММММММММ" },
+      ],
     },
     {
       id: 3,
-      label: "ХХХ", 
+      label: "ХХХ",
       recordType: "Локальная",
       login: "Значение",
       password: "123456",
+      labelsArray: [{ text: "ХХХ" }],
     },
     {
       id: 4,
@@ -32,6 +40,7 @@ export const useAccountsStore = defineStore("accounts", () => {
       recordType: "LDAP",
       login: "Значение",
       password: "123456",
+      labelsArray: [{ text: "ХХХ" }],
     },
   ]);
 
@@ -54,13 +63,13 @@ export const useAccountsStore = defineStore("accounts", () => {
       id: nextId.value,
       ...account,
     });
-    // saveToLocalStorage();
+    
   };
 
   const addEmptyRow = () => {
     accounts.value.push({
       id: nextId.value,
-      label: '',
+      label: "",
       recordType: "Локальная",
       login: "",
       password: "",
@@ -73,13 +82,13 @@ export const useAccountsStore = defineStore("accounts", () => {
       const account = accounts.value[index] as IStateAccount;
       accounts.value[index] = { ...account, ...updated };
     }
-    // saveToLocalStorage();
+    saveToLocalStorage();
   };
 
   const removeAccount = (id: number) => {
     accounts.value = accounts.value.filter((acc) => acc.id !== id);
 
-    // saveToLocalStorage();
+    saveToLocalStorage();
   };
 
   const saveToLocalStorage = () => {

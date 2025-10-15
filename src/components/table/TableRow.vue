@@ -45,16 +45,16 @@ const handleInputBlur = (field: keyof IStateAccount, value: string) => {
       updateData.labelsArray = getArrayFromLabels(value);
     }
     accountsStore.updateAccount(account.id, updateData);
-    // accountsStore.saveToLocalStorage();
+    accountsStore.saveToLocalStorage();
   }
 };
 
 const handleSelectChange = (recordType: "Локальная" | "LDAP") => {
   const updateData =
-    recordType === "LDAP" ? { recordType, password: null } : { recordType };
+    recordType === "LDAP" ? { recordType, password: "" } : { recordType };
 
   accountsStore.updateAccount(account.id, updateData);
-  // accountsStore.saveToLocalStorage();
+  accountsStore.saveToLocalStorage();
 };
 </script>
 
@@ -75,7 +75,7 @@ const handleSelectChange = (recordType: "Локальная" | "LDAP") => {
       <UISelect
         :model-value="account.recordType"
         :options="options"
-        @update:model-select="accountsStore.updateAccount(account.id, $event)"
+        @update:model-select="handleSelectChange"
       />
     </td>
 

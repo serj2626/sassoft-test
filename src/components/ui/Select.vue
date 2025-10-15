@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import type { ISelectOption, ISelectProps } from "../../types";
-import { setNewSelectData } from "../../utils/functions";
 
 const props = defineProps<ISelectProps>();
 
@@ -20,7 +19,7 @@ const toggleDropdown = () => {
 
 const selectOption = (option: ISelectOption) => {
   isOpen.value = false;
-  emit("update:modelSelect", setNewSelectData(option.label));
+  emit("update:modelSelect", option.label); 
 };
 
 const handleClickOutside = (event: MouseEvent) => {
