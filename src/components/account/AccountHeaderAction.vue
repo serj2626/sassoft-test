@@ -10,7 +10,7 @@ const modal = useAccountsStore();
       class="account-header-action__btn"
       icon="plus"
       size="26"
-      @click="modal.addAccount"
+      @click="modal.addEmptyRow"
     />
   </div>
 </template>

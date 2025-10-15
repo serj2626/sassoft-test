@@ -22,7 +22,6 @@ export function getArrayFromLabels(labels: string): string[] {
 
 
 export function validateLabels(labels: string): string | null {
-  // Необязательное поле - если пустое, то валидно
   if (!labels.trim()) {
     return null;
   }

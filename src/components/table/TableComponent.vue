@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { useAccountsStore } from "../../stores/accounts";
 import { ref } from "vue";
 import type { ISelectOption } from "../../types";
+import TableRow from "./TableRow.vue";
 
 const accountsStore = useAccountsStore();
 const { accounts } = storeToRefs(accountsStore);
@@ -20,73 +21,21 @@ const options = ref<ISelectOption[]>([
           <th>Метки</th>
           <th>Тип записи</th>
           <th>Логин</th>
-          <th>Пароль</th>
-          <th></th>
+          <th rowspan="2">Пароль</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="account in accounts" :key="account.id">
-          <td>
-            <UIInput
-              type="text"
-              mode="label"
-              :required="false"
-              placeholder="Необязательное поле"
-              :input-value="account.label"
-              class="table-component__input"
-              @update:input-value="
-                accountsStore.updateAccount(account.id, { label: $event })
-              "
-            />
-          </td>
-          <td>
-            <UISelect
-              :model-value="account.recordType"
-              :options="options"
-              @update:model-select="
-                accountsStore.updateAccount(account.id, $event)
-              "
-            />
-          </td>
-          <td :colspan="account.recordType !== 'Локальная' ? `2` : `1`">
-            <UIInput
-              type="text"
-              mode="login"
-              :required="true"
-              placeholder="Введите логин"
-              :input-value="account.login"
-              class="table-component__input"
-              @update:input-value="
-                accountsStore.updateAccount(account.id, { login: $event })
-              "
-            />
-          </td>
-          <td v-if="account.recordType === 'Локальная'">
-            <UIInput
-              type="password"
-              mode="password"
-              :required="true"
-              placeholder="Введите пароль"
-              :input-value="account.password"
-              class="table-component__input"
-              @update:input-value="
-                accountsStore.updateAccount(account.id, { password: $event })
-              "
-            />
-          </td>
-          <td>
-            <UIButton
-              icon="del"
-              size="26"
-              @click="accountsStore.removeAccount(account.id)"
-            />
-          </td>
-        </tr>
+        <TableRow
+          v-for="account in accounts"
+          :key="account.id"
+          :account="account"
+          :options="options"
+        />
       </tbody>
     </table>
   </div>
 </template>
-<style scoped lang="scss">
+<style lang="scss">
 .table-component {
   width: 100%;
 }
@@ -94,19 +43,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
-}
-
-th {
-  background-color: #f2f2f2;
-  padding: 12px;
-  text-align: left;
-
-  font-weight: bold;
-}
-
-td {
-  padding: 10px;
-  vertical-align: baseline;
 }
 
 tbody tr:nth-child(even) {

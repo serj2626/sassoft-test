@@ -1,4 +1,4 @@
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 
 import type { IStateAccount } from "../types";
 import { defineStore } from "pinia";
@@ -56,14 +56,21 @@ export const useAccountsStore = defineStore("accounts", () => {
     }
   }
 
-  watchEffect(() => {
-    localStorage.setItem("accounts", JSON.stringify(accounts.value));
-  });
-
   const addAccount = (account: Omit<IStateAccount, "id">) => {
     accounts.value.push({
       id: nextId.value,
       ...account,
+    });
+    // saveToLocalStorage();
+  };
+
+  const addEmptyRow = () => {
+    accounts.value.push({
+      id: nextId.value,
+      label: "",
+      recordType: "Локальная",
+      login: "",
+      password: "",
     });
   };
 
@@ -73,9 +80,17 @@ export const useAccountsStore = defineStore("accounts", () => {
       const account = accounts.value[index] as IStateAccount;
       accounts.value[index] = { ...account, ...updated };
     }
+    // saveToLocalStorage();
   };
+
   const removeAccount = (id: number) => {
     accounts.value = accounts.value.filter((acc) => acc.id !== id);
+
+    saveToLocalStorage();
+  };
+
+  const saveToLocalStorage = () => {
+    localStorage.setItem("accounts", JSON.stringify(accounts.value));
   };
 
   const reset = () => {
@@ -85,10 +100,12 @@ export const useAccountsStore = defineStore("accounts", () => {
 
   return {
     accounts,
+    nextId,
     addAccount,
+    addEmptyRow,
     updateAccount,
     removeAccount,
     reset,
-    nextId,
+    saveToLocalStorage,
   };
 });

@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { checkLength, validateLabels } from "../../utils/validation";
 
 type TInputTypes = "email" | "number" | "password" | "tel" | "text";
 
-defineEmits(["update:input-value"]);
+const emit = defineEmits<{
+  blur: [value: string];
+}>();
 
 interface IInputProps {
   placeholder?: string;
   type?: TInputTypes;
-  inputValue?: string;
   required?: boolean;
-  mode?: "label" | "login" | "password";
+  error?: string | null;
 }
 
 const {
   placeholder = "Введите текст",
   type = "text",
-  required = false,
-  mode = "label",
-  inputValue,
+  error,
 } = defineProps<IInputProps>();
+
+const inputValue = defineModel<string>("modelValue");
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const isFocused = ref(false);
-const error = ref<string | null>(null);
+
 const showPassword = ref(false);
 
 const currentType = computed(() => {
@@ -35,22 +35,12 @@ const currentType = computed(() => {
 });
 
 const handleFocus = () => {
-  error.value = null;
   isFocused.value = true;
 };
 
 const handleBlur = (event: FocusEvent) => {
   isFocused.value = false;
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
-
-  if (mode === "label") {
-    const validationError = validateLabels(value);
-    error.value = validationError;
-  } else {
-    const res = checkLength(value, mode);
-    error.value = res || null;
-  }
+  emit("blur", (event.target as HTMLInputElement).value);
 };
 </script>
 
@@ -65,7 +55,7 @@ const handleBlur = (event: FocusEvent) => {
     <input
       ref="inputRef"
       :type="currentType"
-      :value="inputValue"
+      v-model="inputValue"
       class="base-input__input"
       @focus="handleFocus"
       @blur="handleBlur"

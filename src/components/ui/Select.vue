@@ -19,8 +19,8 @@ const toggleDropdown = () => {
 };
 
 const selectOption = (option: ISelectOption) => {
-  emit("update:modelSelect", setNewSelectData(option.label));
   isOpen.value = false;
+  emit("update:modelSelect", setNewSelectData(option.label));
 };
 
 const handleClickOutside = (event: MouseEvent) => {
