@@ -116,7 +116,7 @@ const handleBlur = (event: FocusEvent) => {
 
   &__error {
     position: absolute;
-    bottom: -20px;
+    bottom: -35px;
     left: 0;
     color: $danger;
     font-size: 12px;
